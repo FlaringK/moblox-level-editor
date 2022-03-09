@@ -37,20 +37,23 @@ let ontableclick = (elemt) => {
 
 let generateLevel = () => {
 	var output = []
-	var blockCount = 0
-	while (document.querySelector(".block" + blockCount)) {
-		var newBlock = {
-			coords: [],
-		}
-		newBlock.color = blockColors[blockCount]
-		
-		document.querySelectorAll(".block" + blockCount).forEach(e => {
-			newBlock.coords.push([parseInt(e.getAttribute("xcoord")), parseInt(e.getAttribute("ycoord"))])
-		})
-		
-		output.push(newBlock)
-		blockCount += 1
-	}
+
+  for (const [key, value] of Object.entries(blockColors)) {
+  	if (document.querySelector(".block" + key)) {
+      var newBlock = {
+        coords: [],
+      }
+      newBlock.color = value
+      
+      document.querySelectorAll(".block" + key).forEach(e => {
+        newBlock.coords.push([parseInt(e.getAttribute("xcoord")), parseInt(e.getAttribute("ycoord"))])
+      })
+      
+      output.push(newBlock)
+    }
+  }
+
+  console.log(blockColors)
 	console.log(output)
 	document.getElementById('levelOuput').value = JSON.stringify(output)
 }
