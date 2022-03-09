@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moblox Level editor</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Pullbox Clone level creator</h2>
+  Assign to block: <input type="number" value=0 onchange="changeSelectedBlock(this)" id=blockIndex>
+  <input type="color" value=#ff0000 id="blockColor" onchange="setBlockColor(this.value)">
+  <table id="table"></table>
+  <button onclick="generateLevel()">Generate Level</button>
+  <br><br>
+  <textarea id=levelOuput rows="10" cols="60" onClick="this.select();"></textarea>
+
+  <script src="level.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+body {
+	text-align: center;
+	font-family: 'Courier New', Courier, monospace;
+}
+
+table, td {
+	border: solid;
+	border-collapse: collapse;
+	margin: .5em auto;
+}
+
+td {
+	border: 1px solid rgb(207, 207, 207);
+	width: 2em;
+	height: 2em;
+	font-weight: 600;
+}
