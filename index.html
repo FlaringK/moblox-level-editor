@@ -12,7 +12,7 @@
   <h2>Pullbox Clone level creator</h2>
   Assign to block: <input type="number" value=0 onchange="changeSelectedBlock(this)" id=blockIndex>
   <input type="color" value=#ff0000 id="blockColor" onchange="setBlockColor(this.value)">
-  <table id="table"></table>
+  <table id="table" onmouseleave="ontablemouseup()"></table>
   <button onclick="generateLevel()">Generate Level</button>
   <br><br>
   <textarea id=levelOuput rows="10" cols="60" onClick="this.select();"></textarea>

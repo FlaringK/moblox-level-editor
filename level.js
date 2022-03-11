@@ -21,20 +21,6 @@ let setBlockColor = (color) => {
   return color
 }
 
-let ontableclick = (elemt) => {
-	if (elemt.className == "block" + currentBlock) {
-		elemt.innerText = ""
-		elemt.className = ""
-		elemt.style.background = "transparent"
-    elemt.style.color = ""
-	} else {
-		elemt.innerText = currentBlock
-		elemt.className = "block" + currentBlock
-		elemt.style.background = blockColors[currentBlock]
-    elemt.style.color = invertColor(blockColors[currentBlock])
-	}
-}
-
 let generateLevel = () => {
 	var output = []
 
@@ -66,12 +52,54 @@ for (let y = 0; y < 16; y++) {
 		newData.coord = "[" + (x - 7) + ", " + y + "]"
 		newData.setAttribute("xcoord",  (x - 7))
 		newData.setAttribute("ycoord",  y)
-		newData.setAttribute("onclick", "ontableclick(this)")
+		newData.setAttribute("onmousedown", "ontableclick(this)")
+    newData.setAttribute("onmouseover", "ontableover(this)")
+    newData.setAttribute("onmouseup", "ontablemouseup(this)")
+    newData.style.userSelect = "none"
 		newRow.appendChild(newData)
 	}
 	table.prepend(newRow)
 }
 
+var drawState = "off"
+
+let ontableclick = (elemt) => {
+	if (elemt.className == "block" + currentBlock) {
+    drawState = "erase"
+		elemt.innerText = ""
+		elemt.className = ""
+		elemt.style.background = "transparent"
+    elemt.style.color = ""
+	} else {
+    drawState = "draw"
+		elemt.innerText = currentBlock
+		elemt.className = "block" + currentBlock
+		elemt.style.background = blockColors[currentBlock]
+    elemt.style.color = invertColor(blockColors[currentBlock])
+	}
+}
+
+let ontableover = (elemt) => {
+  switch (drawState) {
+    case "draw":
+      elemt.innerText = currentBlock
+      elemt.className = "block" + currentBlock
+      elemt.style.background = blockColors[currentBlock]
+      elemt.style.color = invertColor(blockColors[currentBlock])
+      break
+    case "erase":
+      elemt.innerText = ""
+      elemt.className = ""
+      elemt.style.background = "transparent"
+      elemt.style.color = ""
+      break
+  }
+}
+
+let ontablemouseup = (elemt) => {
+  drawState = "off"
+  console.log(drawState)
+}
 
 // from https://stackoverflow.com/questions/36721830/convert-hsl-to-rgb-and-hex
 function hslToHex(h, s, l) {
