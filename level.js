@@ -7,7 +7,7 @@ let blockColors = {
 
 let changeSelectedBlock = (elemt) => {
 	currentBlock = elemt.value
-	document.getElementById('blockColor').value = blockColors[elemt.value] ? blockColors[elemt.value] : setBlockColor(hslToHex(36 * (elemt.value % 10), 100, 50))
+	document.getElementById('blockColor').value = blockColors[elemt.value] ? blockColors[elemt.value] : setBlockColor(blockColors[elemt.value - 1])
 }
 
 let setBlockColor = (color) => {
@@ -28,11 +28,17 @@ let generateLevel = () => {
   	if (document.querySelector(".block" + key)) {
       var newBlock = {
         coords: [],
+        gadgets: {},
       }
       newBlock.color = value
       
       document.querySelectorAll(".block" + key).forEach(e => {
-        newBlock.coords.push([parseInt(e.getAttribute("xcoord")), parseInt(e.getAttribute("ycoord"))])
+        var coord = [parseInt(e.getAttribute("xcoord")), parseInt(e.getAttribute("ycoord"))]
+
+        newBlock.coords.push(coord)
+        if (e.id) {
+          newBlock.gadgets[e.id] = coord
+        }
       })
       
       output.push(newBlock)
@@ -52,9 +58,10 @@ for (let y = 0; y < 16; y++) {
 		newData.coord = "[" + (x - 7) + ", " + y + "]"
 		newData.setAttribute("xcoord",  (x - 7))
 		newData.setAttribute("ycoord",  y)
-		newData.setAttribute("onmousedown", "ontableclick(this)")
+		newData.setAttribute("onmousedown", "ontableclick(this, event)")
     newData.setAttribute("onmouseover", "ontableover(this)")
     newData.setAttribute("onmouseup", "ontablemouseup(this)")
+    newData.setAttribute("oncontextmenu", "ontablecontext(this, event)")
     newData.style.userSelect = "none"
 		newRow.appendChild(newData)
 	}
@@ -63,20 +70,22 @@ for (let y = 0; y < 16; y++) {
 
 var drawState = "off"
 
-let ontableclick = (elemt) => {
-	if (elemt.className == "block" + currentBlock) {
-    drawState = "erase"
-		elemt.innerText = ""
-		elemt.className = ""
-		elemt.style.background = "transparent"
-    elemt.style.color = ""
-	} else {
-    drawState = "draw"
-		elemt.innerText = currentBlock
-		elemt.className = "block" + currentBlock
-		elemt.style.background = blockColors[currentBlock]
-    elemt.style.color = invertColor(blockColors[currentBlock])
-	}
+let ontableclick = (elemt, ev) => {
+  if (ev.buttons == 1) {
+    if (elemt.className == "block" + currentBlock) {
+      drawState = "erase"
+      elemt.innerText = ""
+      elemt.className = ""
+      elemt.style.background = "transparent"
+      elemt.style.color = ""
+    } else {
+      drawState = "draw"
+      elemt.innerText = currentBlock
+      elemt.className = "block" + currentBlock
+      elemt.style.background = blockColors[currentBlock]
+      elemt.style.color = invertColor(blockColors[currentBlock])
+    }
+  }
 }
 
 let ontableover = (elemt) => {
@@ -99,6 +108,24 @@ let ontableover = (elemt) => {
 let ontablemouseup = (elemt) => {
   drawState = "off"
   console.log(drawState)
+}
+
+let ontablecontext = (elemt, ev) => {
+  ev.preventDefault()
+  switch (elemt.id) {
+    case "":
+      elemt.id = "win"
+      break
+    case "win":
+      elemt.id = "arrowd"
+      break
+    case "arrowd":
+      elemt.id = "arrowu"
+      break
+    case "arrowu":
+      elemt.id = ""
+      break
+  }
 }
 
 // from https://stackoverflow.com/questions/36721830/convert-hsl-to-rgb-and-hex

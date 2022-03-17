@@ -15,3 +15,7 @@ td {
 	height: 2em;
 	font-weight: 600;
 }
+
+#win { border: solid gold }
+#arrowd { border: solid crimson }
+#arrowu { border: solid skyblue }
